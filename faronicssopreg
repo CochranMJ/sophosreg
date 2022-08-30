@@ -1,0 +1,53 @@
+#Uninstall Sophos Remote Management System
+$SRMSVer = Get-ChildItem -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall, HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall  |
+    Get-ItemProperty |
+        Where-Object {$_.DisplayName -match "Sophos Remote Management System" } |
+            Select-Object -Property DisplayName, UninstallString
+
+ForEach ($ver in $SRMSVer) {
+
+    If ($ver.UninstallString) {
+
+        $uninst = $ver.UninstallString
+        Start-Process cmd "/c $uninst /qn REBOOT=SUPPRESS /PASSIVE" -NoNewWindow
+    }
+
+}
+
+Start-Sleep -Seconds 30
+
+#Uninstall Sophos AutoUpdate
+$SAUVer = Get-ChildItem -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall, HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall  |
+    Get-ItemProperty |
+        Where-Object {$_.DisplayName -match "Sophos AutoUpdate" } |
+            Select-Object -Property DisplayName, UninstallString
+
+ForEach ($ver in $SAUVer) {
+
+    If ($ver.UninstallString) {
+
+        $uninst = $ver.UninstallString
+        Start-Process cmd "/c $uninst /qn REBOOT=SUPPRESS /PASSIVE" -NoNewWindow
+    }
+
+}
+
+Start-Sleep -Seconds 30
+
+#Uninstall Sophos Endpoint Defense
+$SEDVer = Get-ChildItem -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall, HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall  |
+    Get-ItemProperty |
+        Where-Object {$_.DisplayName -match "Sophos Endpoint Defense" } |
+            Select-Object -Property DisplayName, UninstallString
+
+ForEach ($ver in $SEDVer) {
+
+    If ($ver.UninstallString) {
+
+        $uninst = $ver.UninstallString
+        cmd /c "$uninst"
+    }
+}
+
+REG Delete "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run" /v "Sophos AutoUpdate Monitor" /f
+
